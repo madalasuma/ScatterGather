@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:file="http://www.mulesoft.org/schema/mule/file"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="cfba33fb-c301-41da-8bbc-3600d39aa73e" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<file:config name="File_Config" doc:name="File Config" doc:id="f2656ae1-ed90-48a6-941f-a6f7c6060e77" />
+	<file:config name="File_Config1" doc:name="File Config" doc:id="36ff8659-0fdf-4a4c-a935-f7a57e496f6b" />
+	<flow name="scatter-gatherFlow" doc:id="29151bf3-1cec-4463-a8dd-c4a16c700073" >
+		<http:listener doc:name="Listener" doc:id="956863b5-605b-4a9a-adf1-e1e12f69f5bf" path="/scattergather" config-ref="HTTP_Listener_config"/>
+		<scatter-gather doc:name="Scatter-Gather" doc:id="b7b2e19c-b0fa-4326-bf2e-f83e3c924ffc" >
+			<route >
+				<file:read doc:name="Read" doc:id="d3def085-2d7c-4e95-9cb7-4f53bdbcf8d6" path="C:\Users\MSUMANJA\OneDrive - Capgemini\Desktop\Poc's\Accounts.txt" config-ref="File_Config"/>
+				<logger level="INFO" doc:name="Logger" doc:id="68ebcb5b-f13d-46db-93e0-8dbc33ad0af7" />
+			</route>
+			<route >
+				<file:read doc:name="Read" doc:id="f225bea1-9933-48ba-9790-7b7938322d0a" config-ref="File_Config1" path="C:\Users\MSUMANJA\OneDrive - Capgemini\Desktop\Poc's\balances.txt"/>
+				<logger level="INFO" doc:name="Logger" doc:id="1016c1f1-55b8-461b-82f6-1075050eed54" />
+			</route>
+		</scatter-gather>
+		<ee:transform doc:name="Transform Message" doc:id="d9c33044-4578-47d7-b54c-019ca37cfced" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>
