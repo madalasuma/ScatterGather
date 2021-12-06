@@ -15,6 +15,10 @@
             <SizeBasedTriggeringPolicy size="10 MB"/>
             <DefaultRolloverStrategy max="10"/>
         </RollingFile>
+        <socket name="socket" host="localhost" port="4560"
+        protocol="TCP">
+        <JsonLayout compact="true" eventEOL="true"/>
+        </socket>
     </Appenders>
 
     <Loggers>
@@ -28,6 +32,7 @@
 
         <AsyncRoot level="INFO">
             <AppenderRef ref="file"/>
+            <AppenderRef ref="socket"/>
         </AsyncRoot>
     </Loggers>
 
