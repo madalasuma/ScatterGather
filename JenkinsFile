@@ -19,3 +19,4 @@ bat 'mvn clean install deploy -DmuleDeploy -DskipTests -Dmule.version=4.4.0 -Dan
 
 
 }
+}
